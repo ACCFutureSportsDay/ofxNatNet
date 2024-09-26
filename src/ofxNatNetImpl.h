@@ -29,11 +29,9 @@ static constexpr int impl_minor = 1;
 // sender
 struct sSender
 {
-	char szName[MAX_NAMELENGTH];  // sending app's name
-	uint8_t
-		Version[4];  // sending app's version [major.minor.build.revision]
-	uint8_t NatNetVersion
-		[4];  // sending app's NatNet version [major.minor.build.revision]
+	char szName[MAX_NAMELENGTH];	// sending app's name
+	uint8_t Version[4];				// sending app's version [major.minor.build.revision]
+	uint8_t NatNetVersion[4];		// sending app's NatNet versio [major.minor.build.revision]
 };
 
 struct sPacket

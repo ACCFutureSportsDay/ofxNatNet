@@ -11,16 +11,19 @@ void ofApp::setup() {
 	ofSetVerticalSync(true);
 	ofBackground(0);
 
-	string interface_name = "192.168.0.103"; // local network device ip address
+	string interface_name = "192.168.10.10"; // local network device ip address
 	// interface_name = "en0"; // or network interface name
 	
-	natnet.setup(interface_name, "192.168.0.1");  // interface name, server ip
+	natnet.setup(interface_name, "192.168.10.10");  // interface name, server ip
 	natnet.setScale(100);
 	natnet.setDuplicatedPointRemovalDistance(20);
+	natnet.forceSetNatNetVersion(3, 1);
 }
 
 //--------------------------------------------------------------
-void ofApp::update() { natnet.update(); }
+void ofApp::update() { 
+	natnet.update(); 
+}
 
 //--------------------------------------------------------------
 void ofApp::draw() {
@@ -115,7 +118,11 @@ void ofApp::draw() {
 void ofApp::keyPressed(int key) {}
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key) {}
+void ofApp::keyReleased(int key) {
+	if (key == 'f' || key == 'F') {
+		ofToggleFullscreen();
+	}
+}
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y) {}

@@ -18,16 +18,16 @@ ofxNatNet::InternalThread::InternalThread(string iface_name, string target_host,
 	try
 	{
 		{
-			Poco::Net::SocketAddress addr(Poco::Net::IPAddress::wildcard(),
-											data_port);
-				            try
+			Poco::Net::SocketAddress addr(Poco::Net::IPAddress::wildcard(), data_port);
+			try
 			{
 				iface = Poco::Net::NetworkInterface::forAddress(Poco::Net::IPAddress(iface_name));
 			}
 			catch (const Poco::Net::InvalidAddressException& e)
 			{
 				iface = Poco::Net::NetworkInterface::forName(
-					iface_name, Poco::Net::NetworkInterface::IPv4_ONLY);
+					iface_name, 
+					Poco::Net::NetworkInterface::IPv4_ONLY);
 			}
                 
 
@@ -38,41 +38,37 @@ ofxNatNet::InternalThread::InternalThread(string iface_name, string target_host,
 			data_socket.setBlocking(false);
 
 			data_socket.setReceiveBufferSize(0x100000);
-#ifndef TARGET_LINUX    //on linux buffer sizes are restricted so this will fail
-            assert(data_socket.getReceiveBufferSize() == 0x100000);
-#endif
+			#ifndef TARGET_LINUX    //on linux buffer sizes are restricted so this will fail
+						assert(data_socket.getReceiveBufferSize() == 0x100000);
+			#endif
         }
 
-		for (int i = 0; i < 4; i++)
-		{
+		for (int i = 0; i < 4; i++)	{
 			NatNetVersion[i] = 0;
 			ServerVersion[i] = 0;
 		}
 
 		{
-
-                
-                
-#ifndef TARGET_OS_X      //on OSX interface.address() returns an ipv6 address 
-            Poco::Net::SocketAddress my_addr("0.0.0.0", 0);
-#else
-            Poco::Net::SocketAddress my_addr(iface.address(), 0);
-#endif
+			#ifndef TARGET_OS_X      //on OSX interface.address() returns an ipv6 address 
+						Poco::Net::SocketAddress my_addr("0.0.0.0", 0);
+			#else
+						Poco::Net::SocketAddress my_addr(iface.address(), 0);
+			#endif
 			command_socket.bind(my_addr, true);
 			command_socket.setReceiveBufferSize(0x100000);
 			command_socket.setBroadcast(true);
-#ifndef TARGET_LINUX    //on linux buffer sizes are restricted so this will fail
-            assert(command_socket.getReceiveBufferSize() == 0x100000);
-#endif
+			#ifndef TARGET_LINUX    //on linux buffer sizes are restricted so this will fail
+						assert(command_socket.getReceiveBufferSize() == 0x100000);
+			#endif
 		}
 
 		{
 			Poco::Net::SocketAddress target_addr(target_host, command_port);
 			command_socket.connect(target_addr);
 			command_socket.setSendBufferSize(0x100000);
-#ifndef TARGET_LINUX    //on linux buffer sizes are restricted so this will fail
-            assert(command_socket.getSendBufferSize() == 0x100000);
-#endif
+			#ifndef TARGET_LINUX    //on linux buffer sizes are restricted so this will fail
+						assert(command_socket.getSendBufferSize() == 0x100000);
+			#endif
 		}
 
         sendPing();
@@ -80,7 +76,6 @@ ofxNatNet::InternalThread::InternalThread(string iface_name, string target_host,
         sendRequestDescription();
 
         startThread();
-
 	}
 	catch (const std::exception& e)
 	{
@@ -190,11 +185,13 @@ void ofxNatNet::InternalThread::sendPing()
 
                     for (int i = 0; i < 4; i++)
 					{
-                        NatNetVersion[i] = packet.Data.Sender.NatNetVersion[i];
+						NatNetVersion[i] = packet.Data.Sender.NatNetVersion[i];
                         ServerVersion[i] = packet.Data.Sender.Version[i];
                     }
 
-					printf("connected. NatNet: v%i.%i, Server: v%i.%i\n", NatNetVersion[0], NatNetVersion[1], ServerVersion[0], ServerVersion[1]);
+					printf("connected. NatNet: v%i.%i.%i.%i, Server: v%i.%i.%i.%i\n", 
+						NatNetVersion[0], NatNetVersion[1], NatNetVersion[2], NatNetVersion[3], 
+						ServerVersion[0], ServerVersion[1], ServerVersion[2], ServerVersion[3]);
                     fflush(stdout);
 
 					return;
@@ -1088,6 +1085,7 @@ void ofxNatNet::debugDrawInformation()
 	ofToString(getNumFilterdMarker()) + "\n";
 	str += "num rigidbody: " + ofToString(getNumRigidBody()) + "\n";
 	str += "num skeleton: " + ofToString(getNumSkeleton()) + "\n\n";
+	assert(thread);
     
     if (markerset_descs.size() || rigidbody_descs.size() || skeleton_descs.size()) {
         str += "Description: \n";

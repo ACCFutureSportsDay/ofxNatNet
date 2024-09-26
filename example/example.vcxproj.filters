@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\ofApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\testApp.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxNatNet\src\ofxNatNet.cpp">
@@ -22,33 +22,33 @@
       <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons">
-      <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+      <UniqueIdentifier>{A04B42AC--E07-8-49-BD-8-FED-F28C68D21D31}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxNatNet">
-      <UniqueIdentifier>{2A839C9F-9C35-82C1-AE66-E767}</UniqueIdentifier>
+      <UniqueIdentifier>{5A6805F2--15C-9-4C-37-9-711-244C2731C6A2}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxNatNet\src">
-      <UniqueIdentifier>{A9CBA76B-4224-12CE-2F09-3FA6}</UniqueIdentifier>
+      <UniqueIdentifier>{3DDEE0F3--DD7-5-4B-0A-9-BFC-019F7C6A710F}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxPoco">
-      <UniqueIdentifier>{3256AE3E-9B29-EA27-C842-CE6B}</UniqueIdentifier>
+      <UniqueIdentifier>{98E6D3C7--267-3-4C-94-A-45D-FE5D91AF7E66}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxPoco\src">
-      <UniqueIdentifier>{C7D4269D-D8A9-A7BB-531B-98DA}</UniqueIdentifier>
+      <UniqueIdentifier>{72C539FD--CA5-7-4D-13-8-D5D-2A04E180AF84}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\testApp.h">
+    <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxNatNet\src\ofxNatNet.h">
       <Filter>addons\ofxNatNet\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNatNet\src\ofxNatNetImpl.h">
+      <Filter>addons\ofxNatNet\src</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxPoco\src\ofxXmlPoco.h">
       <Filter>addons\ofxPoco\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ofxNatNetImpl.h">
-      <Filter>addons\ofxNatNet\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
