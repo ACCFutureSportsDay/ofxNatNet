@@ -23,7 +23,7 @@ ofxNatNet::InternalThread::InternalThread(string iface_name, string target_host,
 			{
 				iface = Poco::Net::NetworkInterface::forAddress(Poco::Net::IPAddress(iface_name));
 			}
-			catch (const Poco::Net::InvalidAddressException& e)
+			catch (const Poco::Net::InvalidAddressException& e) 
 			{
 				iface = Poco::Net::NetworkInterface::forName(
 					iface_name, 
@@ -71,7 +71,7 @@ ofxNatNet::InternalThread::InternalThread(string iface_name, string target_host,
 			#endif
 		}
 
-        sendPing();
+        connect();
         ofSleepMillis(100);
         sendRequestDescription();
 
@@ -154,10 +154,10 @@ void ofxNatNet::InternalThread::sendRequestDescription() {
     }
 }
 
-void ofxNatNet::InternalThread::sendPing()
+void ofxNatNet::InternalThread::connect()
 {
 	sPacket ping_packet;
-	ping_packet.iMessage = NAT_PING;
+	ping_packet.iMessage = NAT_CONNECT;
 	ping_packet.nDataBytes = 0;
 
 	connected = false;
@@ -179,7 +179,7 @@ void ofxNatNet::InternalThread::sendPing()
 													sizeof(sPacket));
 					
 
-				if (n > 0 && packet.iMessage == NAT_PINGRESPONSE)
+				if (n > 0 && packet.iMessage == NAT_SERVERINFO)
 				{
 					connected = true;
 
@@ -988,7 +988,7 @@ void ofxNatNet::forceSetNatNetVersion(int major, int minor)
 	thread->NatNetVersion[1] = minor;
 }
 
-void ofxNatNet::sendPing() { thread->sendPing(); }
+void ofxNatNet::connect() { thread->connect(); }
 
 void ofxNatNet::sendRequestDescription() { thread->sendRequestDescription(); }
 
@@ -1084,8 +1084,11 @@ void ofxNatNet::debugDrawInformation()
 	str += "num filterd (non rigidbodies) marker: " +
 	ofToString(getNumFilterdMarker()) + "\n";
 	str += "num rigidbody: " + ofToString(getNumRigidBody()) + "\n";
-	str += "num skeleton: " + ofToString(getNumSkeleton()) + "\n\n";
+	str += "num skeleton: " + ofToString(getNumSkeleton()) + "\n";
 	assert(thread);
+	str += "markersetDescription size is : " + ofToString(markerset_descs.size()) + "\n";
+	str += "rigidBodyDescription size is : " + ofToString(markerset_descs.size()) + "\n";
+	str += "skeletonDescription size is : " + ofToString(markerset_descs.size()) + "\n";
     
     if (markerset_descs.size() || rigidbody_descs.size() || skeleton_descs.size()) {
         str += "Description: \n";
@@ -1094,7 +1097,7 @@ void ofxNatNet::debugDrawInformation()
         for (auto& desc : skeleton_descs) { str += "Skeleton Name: " + desc.name + "\n"; }
     }
 	
-	ofDrawBitmapStringHighlight(str, 10, 20, ofColor(40), ofColor(255));
+	ofDrawBitmapStringHighlight(str, 10, 20, ofColor(10), ofColor(255));
 	
 	ofPopStyle();
 }

@@ -7,17 +7,19 @@ static constexpr int impl_minor = 1;
 #define MAX_NAMELENGTH 256
 
 // NATNET message ids
-#define NAT_PING 0
-#define NAT_PINGRESPONSE 1
-#define NAT_REQUEST 2
-#define NAT_RESPONSE 3
-#define NAT_REQUEST_MODELDEF 4
-#define NAT_MODELDEF 5
-#define NAT_REQUEST_FRAMEOFDATA 6
-#define NAT_FRAMEOFDATA 7
-#define NAT_MESSAGESTRING 8
-#define NAT_UNRECOGNIZED_REQUEST 100
-#define UNDEFINED 999999.9999
+#define NAT_CONNECT					0
+#define NAT_SERVERINFO				1
+#define NAT_REQUEST					2
+#define NAT_RESPONSE				3
+#define NAT_REQUEST_MODELDEF		4
+#define NAT_MODELDEF				5
+#define NAT_REQUEST_FRAMEOFDATA		6
+#define NAT_FRAMEOFDATA				7
+#define NAT_MESSAGESTRING			8
+#define NAT_DISCONNECT				9
+#define NAT_KEEPALIVE				10
+#define NAT_UNRECOGNIZED_REQUEST	100
+#define UNDEFINED					999999.9999
 
 #define MAX_PACKETSIZE 100000
 // This is needed to enhance portability for struct padding
@@ -123,7 +125,7 @@ struct ofxNatNet::InternalThread : public ofThread
 
 	void sendRequestDescription();
 
-	void sendPing();
+	void connect();
 
 	virtual void dataReceive(float target_time);
 

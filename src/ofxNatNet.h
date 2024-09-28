@@ -84,7 +84,7 @@ public:
 			   int command_port = 1510, int data_port = 1511, InternalThread* thread_ptr = nullptr);
 	void update();
 
-	void sendPing();
+	void connect();
     void sendRequestDescription();
 
 	bool isConnected() const;
