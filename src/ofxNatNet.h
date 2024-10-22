@@ -131,6 +131,10 @@ public:
         return rigidbodies_arr[index];
 	}
 
+	inline const string getRigiedBodyNameAt(int index) const {
+		return rigidbodies_arr[index].name;
+	}
+
     /*
      * Returns true if a rigidbody with given id is available
      */
