@@ -1,8 +1,8 @@
 #pragma once
 #include "ofxNatNet.h"
 
-static constexpr int impl_major = 3;
-static constexpr int impl_minor = 1;
+static constexpr int impl_major = 4;
+static constexpr int impl_minor = 0;
 
 #define MAX_NAMELENGTH 256
 
