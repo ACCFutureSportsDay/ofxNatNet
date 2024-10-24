@@ -755,23 +755,19 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
                     int32_t nRigidMarkers = 0;
                     memcpy(&nRigidMarkers, ptr, 4);
                     ptr += 4;
-                        
-                    int32_t nBytes = nRigidMarkers * 3 * sizeof(float);
-                    float* markerData = (float*)malloc(nBytes);
-                    memcpy(markerData, ptr, nBytes);
-                    ptr += nBytes;
-
-                    int32_t nBytes_label = nRigidMarkers * sizeof(int32_t);
-                    ptr += nBytes_label;
-
-                    for (int k = 0; k < nRigidMarkers; k++)
-                    {
-                        float x = markerData[k * 3];
-                        float y = markerData[k * 3 + 1];
-                        float z = markerData[k * 3 + 2];
-                    }
-                        
-                    if (markerData) free(markerData);
+					
+					// skip marker positions
+					ptr += nRigidMarkers * sizeof(float) * 3;
+					// skip marker labels
+					ptr += nRigidMarkers * sizeof(int32_t);
+					
+					for(int markerIndex = 0; markerIndex < nRigidMarkers; ++markerIndex) {
+						if ((major >= 4) || (major == 0)) {
+							char szMarkerName[256];
+							strcpy(szMarkerName, ptr);
+							ptr += strlen(ptr) + 1;
+						}
+					}
                 }
                     
                 tmp_rigidbody_descs.push_back(description);
@@ -1088,6 +1084,17 @@ void ofxNatNet::debugDrawInformation()
 	ofToString(getNumFilterdMarker()) + "\n";
 	str += "num rigidbody: " + ofToString(getNumRigidBody()) + "\n";
 	str += "num skeleton: " + ofToString(getNumSkeleton()) + "\n\n";
+	
+	if(getNumRigidBody() > 0) {
+		str += "Active Rigidbody: \n";
+		for(int i = 0; i < getNumRigidBody(); ++i) {
+			auto &&rb = getRigidBodyAt(i);
+			if(rb.isActive()) {
+				str += rb.name + "\n";
+			}
+		}
+		str += "\n";
+	}
     
     if (markerset_descs.size() || rigidbody_descs.size() || skeleton_descs.size()) {
         str += "Description: \n";
