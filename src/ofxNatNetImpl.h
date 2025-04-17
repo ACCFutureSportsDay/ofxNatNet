@@ -2,7 +2,7 @@
 #include "ofxNatNet.h"
 
 static constexpr int impl_major = 4;
-static constexpr int impl_minor = 0;
+static constexpr int impl_minor = 1;
 
 #define MAX_NAMELENGTH 256
 
@@ -130,6 +130,8 @@ struct ofxNatNet::InternalThread : public ofThread
 	virtual void dataReceive(float target_time);
 
 	void dataPacketReceiverd(sPacket& packet);
+
+	char* UnpackDataSize(char* ptr, int major, int minor, int& nBytes, bool skip = false);
 
 	char* unpackMarkerSet(char* ptr, vector<Marker>& ref_markers);
 

@@ -230,7 +230,24 @@ void ofxNatNet::InternalThread::dataPacketReceiverd(sPacket& packet)
 {
 	Unpack((char*)&packet);
 }
-	
+
+char* ofxNatNet::InternalThread::UnpackDataSize(char* ptr, int major, int minor, int& nBytes, bool skip)
+{
+	nBytes = 0;
+
+	// size of all data for this data type (in bytes);
+	if (((major == 4) && (minor > 0)) || (major > 4))
+	{
+		memcpy(&nBytes, ptr, 4); ptr += 4;
+		if (skip)
+		{
+			ptr += nBytes;
+		}
+	}
+	return ptr;
+}
+
+
 char* ofxNatNet::InternalThread::unpackMarkerSet(char* ptr, vector<Marker>& ref_markers)
 {
 	int32_t nMarkers = 0;
@@ -269,6 +286,9 @@ char* ofxNatNet::InternalThread::unpackRigidBodies(char* ptr, vector<RigidBody>&
 	int32_t nRigidBodies = 0;
 	memcpy(&nRigidBodies, ptr, 4);
 	ptr += 4;
+
+	int nBytes = 0;
+	ptr = UnpackDataSize(ptr, major, minor, nBytes);
 
     ref_rigidbodies.resize(nRigidBodies);
 		
@@ -425,7 +445,9 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
         vector<Marker> tmp_markers;
         vector<Marker> tmp_filterd_markers;
         vector<RigidBody> tmp_rigidbodies;
-            
+
+		int nBytes = 0;
+
         // for version 3.0 or higher, convert asset markers to rigid body markers by name to stream id table.
         map<string, int> tmp_name_to_stream_id;
         map<int, string> tmp_stream_id_to_name;
@@ -448,7 +470,9 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
 		int32_t nMarkerSets = 0;
 		memcpy(&nMarkerSets, ptr, 4);
 		ptr += 4;
-			
+
+		ptr = UnpackDataSize(ptr, major, minor, nBytes);
+
         tmp_markers_set.resize(nMarkerSets);
 			
 		for (int i = 0; i < nMarkerSets; i++)
@@ -468,7 +492,15 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
 		}
 
 		// unidentified markers
-        ptr = unpackMarkerSet(ptr, tmp_markers);
+		int nOtherMarkers = 0; memcpy(&nOtherMarkers, ptr, 4); ptr += 4;
+		ptr = UnpackDataSize(ptr, major, minor, nBytes);
+
+		for (int j = 0; j < nOtherMarkers; j++)
+		{
+			float x = 0.0f; memcpy(&x, ptr, 4); ptr += 4;
+			float y = 0.0f; memcpy(&y, ptr, 4); ptr += 4;
+			float z = 0.0f; memcpy(&z, ptr, 4); ptr += 4;
+		}
 
 		// rigid bodies
         ptr = unpackRigidBodies(ptr, tmp_rigidbodies);
@@ -682,6 +714,9 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
 			int32_t type = 0;
 			memcpy(&type, ptr, 4);
 			ptr += 4;
+
+			int sizeInBytes = 0;
+			ptr = UnpackDataSize(ptr, major, minor, sizeInBytes);
 
 			if (type == 0)   // markerset
 			{
