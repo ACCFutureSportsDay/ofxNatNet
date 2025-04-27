@@ -159,6 +159,11 @@ void ofxNatNet::InternalThread::sendRequestDescription() {
     }
 }
 
+bool ofxNatNet::needRequestDescription() const
+{
+	return thread->needRequestDescription();
+}
+
 void ofxNatNet::InternalThread::sendPing()
 {
 	sPacket ping_packet;
@@ -474,11 +479,14 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
         ptr = unpackRigidBodies(ptr, tmp_rigidbodies);
             
         if (major >= 3 || major == 0) {
-            for (auto& rigidbody : tmp_rigidbodies) {
-                if (tmp_markers_set_map.find(rigidbody.id) != tmp_markers_set_map.end()) {
-                    rigidbody.markers = tmp_markers_set_map.at(rigidbody.id);
-                    rigidbody.name = tmp_stream_id_to_name[rigidbody.id];
-                }
+			for (auto& rigidbody : tmp_rigidbodies) {
+				if (tmp_markers_set_map.find(rigidbody.id) != tmp_markers_set_map.end()) {
+					rigidbody.markers = tmp_markers_set_map.at(rigidbody.id);
+					rigidbody.name = tmp_stream_id_to_name[rigidbody.id];
+				}
+				else {
+					need_to_update_descs = true;
+				}
             }
         }
 
@@ -843,6 +851,7 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
             this->_name_to_stream_id = tmp_name_to_stream_id;
             unlock();
         }
+		need_to_update_descs = false;
 	}
 	else
 	{

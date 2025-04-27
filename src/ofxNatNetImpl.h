@@ -91,7 +91,7 @@ struct ofxNatNet::InternalThread : public ofThread
 	vector<MarkerSetDescription> _markerset_descs;
 
 	map<string, int> _name_to_stream_id;
-
+	std::atomic<bool> need_to_update_descs;
 
 	float last_packet_arrival_time;
 	float data_rate;
@@ -124,6 +124,7 @@ struct ofxNatNet::InternalThread : public ofThread
 	void threadedFunction();
 
 	void sendRequestDescription();
+	bool needRequestDescription() const { return need_to_update_descs; }
 
 	void sendPing();
 

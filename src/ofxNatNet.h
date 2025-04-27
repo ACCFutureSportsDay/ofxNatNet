@@ -86,6 +86,7 @@ public:
 
 	void sendPing();
     void sendRequestDescription();
+	bool needRequestDescription() const;
 
 	bool isConnected() const;
 	int getFrameNumber() const { return frame_number; }
