@@ -277,6 +277,10 @@ char* ofxNatNet::InternalThread::unpackRigidBodies(char* ptr, vector<RigidBody>&
 
     ref_rigidbodies.resize(nRigidBodies);
 		
+	int32_t something = 0;
+	memcpy(&something, ptr, 4);
+	ptr += 4;
+
 	for (int j = 0; j < nRigidBodies; j++)
 	{
         ofxNatNet::RigidBody& RB = ref_rigidbodies[j];
@@ -456,6 +460,10 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
 			
         tmp_markers_set.resize(nMarkerSets);
 			
+		int32_t nMarkers = 0;
+		memcpy(&nMarkers, ptr, 4);
+		ptr += 4;
+
 		for (int i = 0; i < nMarkerSets; i++)
         {
 			// Markerset name
@@ -471,6 +479,10 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
                 tmp_markers_set_map[tmp_name_to_stream_id[name]] = tmp_markers_set[i];
             }
 		}
+
+		int32_t something = 0;
+		memcpy(&something, ptr, 4);
+		ptr += 4;
 
 		// unidentified markers
         ptr = unpackMarkerSet(ptr, tmp_markers);
@@ -691,6 +703,10 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
 			memcpy(&type, ptr, 4);
 			ptr += 4;
 
+			int32_t something = 0;
+			memcpy(&something, ptr, 4);
+			ptr += 4;
+
 			if (type == 0)   // markerset
 			{
                 MarkerSetDescription description;
@@ -720,7 +736,7 @@ void ofxNatNet::InternalThread::Unpack(char* pData)
 			else if (type == 1)   // rigid body
 			{
                 RigidBodyDescription description;
-                    
+
 				if (major >= 2)
 				{
 					// name

@@ -2,7 +2,7 @@
 #include "ofxNatNet.h"
 
 static constexpr int impl_major = 4;
-static constexpr int impl_minor = 0;
+static constexpr int impl_minor = 1;
 
 #define MAX_NAMELENGTH 256
 
